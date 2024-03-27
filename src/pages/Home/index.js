@@ -10,12 +10,10 @@ const Home = () => {
   const [repos, setRepos] = useState([]);
 
   const handleGetData = async () => {
-    console.log(user);
     const userData = await fetch(`https://api.github.com/users/${user}`);
     const newUser = await userData.json();
 
     if (newUser) {
-      console.log(newUser);
       const { avatar_url, name, bio, login } = newUser;
       setCurretnUser({ avatar_url, name, bio, login });
 
@@ -49,34 +47,38 @@ const Home = () => {
             <button onClick={handleGetData}>Buscar</button>
           </div>
 
-          <>
-            <div className="perfil">
-              <img
-                className="profile"
-                src={currentUser.avatar_url}
-                alt="imagem perfil"
-              />
+          {currentUser && (
+            <>
+              <div className="perfil">
+                <img
+                  className="profile"
+                  src={currentUser.avatar_url}
+                  alt="imagem perfil"
+                />
 
-              <div>
-                <h3>{currentUser.name || "Usuário do GitHub"}</h3>
-                <span>@{currentUser.login}</span>
-                <p>{currentUser.bio}</p>
+                <div>
+                  <h3>{currentUser.name || "Usuário do GitHub"}</h3>
+                  <span>@{currentUser.login}</span>
+                  <p>{currentUser.bio}</p>
+                </div>
               </div>
-            </div>
-            <hr />
-          </>
+              <hr />
+            </>
+          )}
 
-          <div>
-            <h4 className="repositorio">Repositórios</h4>
-            <span>{repos.length} repositórios</span>
-            {repos.map((repo, index) => (
-              <ItemList
-                key={index}
-                title={repo.name}
-                description={repo.description}
-              />
-            ))}
-          </div>
+          {repos.length ? (
+            <div>
+              <h4 className="repositorio">Repositórios</h4>
+              <span>{repos.length} repositórios</span>
+              {repos.map((repo, index) => (
+                <ItemList
+                  key={index}
+                  title={repo.name}
+                  description={repo.description}
+                />
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
